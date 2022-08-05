@@ -8,21 +8,50 @@
 window.addEventListener( 'load', function() {
 
 	/** @type {HTMLCanvasElement} */
-	const canvas = document.getElementById( 'canvas' );
-	const context = canvas.getContext( '2d' );
+	const canvas1 = this.document.getElementById( 'canvas1' );
+	const context1 = canvas1.getContext( '2d' );
+
+	/** @type {HTMLCanvasElement} */
+	const canvas2 = this.document.getElementById( 'canvas2' );
+	const context2 = canvas2.getContext( '2d' );
+
+/** @type {HTMLCanvasElement} */
+const canvas3 = this.document.getElementById( 'canvas3' );
+const context3 = canvas3.getContext( '2d' );
+
+/** @type {HTMLCanvasElement} */
+const canvas4 = this.document.getElementById( 'canvas4' );
+const context4 = canvas4.getContext( '2d' );
 
 	// set canvas size
-	const CANVAS_WIDTH = canvas.width = 400;
-	const CANVAS_HEIGHT = canvas.height = 800;
+	const canvas1Style = this.window.getComputedStyle(canvas1);
+	let CANVAS_WIDTH = canvas1.width = canvas2.width = canvas3.width = canvas4.width = parseFloat(canvas1Style.width, 10);
+	let CANVAS_HEIGHT = canvas1.height = canvas2.height = canvas3.height = canvas4.height = parseFloat(canvas1Style.height, 10);
+	console.log( "Canvas Size = " + CANVAS_WIDTH + " x " + CANVAS_HEIGHT );
+
+	this.window.addEventListener( 'resize', (event) => {
+
+		// note: this doesn't handle re-calculating game objects relative positions
+
+		// use the new grid size for height since the canvas doesn't scale properly
+		gridStyle = this.window.getComputedStyle( document.getElementById('grid') );
+
+		CANVAS_WIDTH = canvas1.width = canvas2.width = canvas3.width = canvas4.width = parseFloat(canvas1Style.width, 10);
+		CANVAS_HEIGHT = canvas1.height = canvas2.height = canvas3.height = canvas4.height = parseFloat(gridStyle.height, 10);
+		console.log( "Resized Canvas = " + CANVAS_WIDTH + " x " + CANVAS_HEIGHT );
+	});
 
 	const NUM_ENEMIES = 12;
-	const enemies = [];
+	const enemies = [ [], [], [], [] ];
 
 	let gameFrame = 0;
 
-	class Enemy {
+	class Enemy1 {
 
-		constructor() {
+		constructor( context ) {
+
+			// canvas context
+			this.context = context;
 
 			// sprite sheet image
 			this.image = new Image();
@@ -44,8 +73,8 @@ window.addEventListener( 'load', function() {
 			this.height = this.spriteHeight / this.scale;
 
 			// randomize initial coordinates, constrained to canvas
-			this.x = Math.random() * ( canvas.width - this.width );
-			this.y = Math.random() * ( canvas.height - this.height );
+			this.x = Math.random() * ( CANVAS_WIDTH - this.width );
+			this.y = Math.random() * ( CANVAS_HEIGHT - this.height );
 
 			// movement speed
 			this.speed = 0;
@@ -72,13 +101,222 @@ window.addEventListener( 'load', function() {
 		 */
 		draw() {
 
-			context.drawImage( this.image, this.frame * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height );
+			this.context.drawImage( this.image, this.frame * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height );
 		}
 	}
 
+	class Enemy2 {
+
+		constructor( context ) {
+
+			// canvas context
+			this.context = context;
+
+			// sprite sheet image
+			this.image = new Image();
+			this.image.src = 'art/enemy2.png';
+
+			// sprite frame size
+			this.spriteWidth = 266;
+			this.spriteHeight = 188;
+
+			// sprite frame count (zero-indexed)
+			this.maxFrame = 5;
+
+			// randomize initial sprite frame
+			this.frame = Math.floor(Math.random() * this.maxFrame);
+
+			// draw size
+			this.scale = ( 1 + Math.random() * 2 );
+			this.width = this.spriteWidth / this.scale;
+			this.height = this.spriteHeight / this.scale;
+
+			// randomize initial coordinates, constrained to canvas
+			this.x = Math.random() * ( CANVAS_WIDTH - this.width );
+			this.y = Math.random() * ( CANVAS_HEIGHT - this.height );
+
+			// movement speed
+			this.speed = 1 + Math.random() * 4; 
+
+			// sine wave based movement angle
+			this.angle = Math.random() * 2;
+			this.angleSpeed = Math.random() * 0.2;
+			this.curveSize = Math.random() * 6;
+
+			// randomize animation speed
+			this.animationSpeed = Math.floor(2 + Math.random() * 4);
+		}
+
+		/**
+		 * Updates the enemy state
+		 */
+		update() {
+			this.x -= this.speed;
+			this.y += Math.sin( this.angle ) * this.curveSize;
+			this.angle += this.angleSpeed;
+
+			if ( this.x + this.width < 0 ) { this.x = CANVAS_WIDTH }
+
+			if ( gameFrame % this.animationSpeed == 0 ) {
+
+				this.frame >= this.maxFrame ? this.frame = 0 : this.frame++;
+			}
+		}
+
+		/**
+		 * Draws the enemy
+		 */
+		draw() {
+
+			this.context.drawImage( this.image, this.frame * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height );
+		}
+	}
+
+	class Enemy3 {
+
+		constructor( context ) {
+
+			// canvas context
+			this.context = context;
+
+			// sprite sheet image
+			this.image = new Image();
+			this.image.src = 'art/enemy3.png';
+
+			// sprite frame size
+			this.spriteWidth = 218;
+			this.spriteHeight = 177;
+
+			// sprite frame count (zero-indexed)
+			this.maxFrame = 5;
+
+			// randomize initial sprite frame
+			this.frame = Math.floor(Math.random() * this.maxFrame);
+
+			// draw size
+			this.scale = ( 1 + Math.random() * 2 );
+			this.width = this.spriteWidth / this.scale;
+			this.height = this.spriteHeight / this.scale;
+
+			// randomize initial coordinates, constrained to canvas
+			this.x = Math.random() * ( CANVAS_WIDTH - this.width );
+			this.y = Math.random() * ( CANVAS_HEIGHT - this.height );
+
+			// movement speed
+			this.speed = 1 + Math.random() * 4; 
+
+			// sine wave based movement angle
+			this.angle = Math.random() * 2;
+			this.angleSpeed = 0.5 + Math.random() * 2;
+			//this.curveSize = (CANVAS_WIDTH/6) + Math.random() * (CANVAS_WIDTH/2);
+
+			// randomize animation speed
+			this.animationSpeed = Math.floor(2 + Math.random() * 4);
+		}
+
+		/**
+		 * Updates the enemy state
+		 */
+		update() {
+			this.x = (CANVAS_WIDTH/2 - this.width/2) + Math.sin( this.angle * Math.PI / 230 ) * CANVAS_WIDTH/2;
+			this.y = (CANVAS_HEIGHT/2 - this.height/2) + Math.cos( this.angle * Math.PI / 180 ) * CANVAS_HEIGHT/2;
+			this.angle += this.angleSpeed;
+
+			if ( gameFrame % this.animationSpeed == 0 ) {
+
+				this.frame >= this.maxFrame ? this.frame = 0 : this.frame++;
+			}
+		}
+
+		/**
+		 * Draws the enemy
+		 */
+		draw() {
+
+			this.context.drawImage( this.image, this.frame * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height );
+		}
+	}
+
+	class Enemy4 {
+
+		constructor( context ) {
+
+			// canvas context
+			this.context = context;
+
+			// sprite sheet image
+			this.image = new Image();
+			this.image.src = 'art/enemy4.png';
+
+			// sprite frame size
+			this.spriteWidth = 213;
+			this.spriteHeight = 213;
+
+			// sprite frame count (zero-indexed)
+			this.maxFrame = 5;
+
+			// randomize initial sprite frame
+			this.frame = Math.floor(Math.random() * this.maxFrame);
+
+			// draw size
+			this.scale = ( 1 + Math.random() * 2 );
+			this.width = this.spriteWidth / this.scale;
+			this.height = this.spriteHeight / this.scale;
+
+			// randomize initial coordinates, constrained to canvas
+			this.x = Math.random() * ( CANVAS_WIDTH - this.width );
+			this.y = Math.random() * ( CANVAS_HEIGHT - this.height );
+			this.newX = Math.random() * ( CANVAS_WIDTH - this.width );
+			this.newY = Math.random() * ( CANVAS_HEIGHT - this.height );
+
+			// movement speed
+			this.speed = 10 + Math.random() * 100;
+
+			// randomize animation speed
+			this.animationSpeed = Math.floor(2 + Math.random() * 4);
+
+			// interval
+			this.interval = Math.floor(50 + Math.random() * 200);
+		}
+
+		/**
+		 * Updates the enemy state
+		 */
+		update() {
+
+			if ( gameFrame % this.interval == 0) {
+				this.newX = Math.random() * ( CANVAS_WIDTH - this.width );
+				this.newY = Math.random() * ( CANVAS_HEIGHT - this.height );
+			}
+
+			let dx = this.x - this.newX;
+			let dy = this.y - this.newY;
+
+			this.x -= dx / this.speed;
+			this.y -= dy / this.speed;
+
+			if ( gameFrame % this.animationSpeed == 0 ) {
+
+				this.frame >= this.maxFrame ? this.frame = 0 : this.frame++;
+			}
+		}
+
+		/**
+		 * Draws the enemy
+		 */
+		draw() {
+
+			this.context.drawImage( this.image, this.frame * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height );
+		}
+	}
+
+
 	for ( let i = 0; i < NUM_ENEMIES; i++ ) {
 
-		enemies.push( new Enemy( 200, 200 ) );
+		enemies[0].push( new Enemy1( context1 ) );
+		enemies[1].push( new Enemy2( context2 ) );
+		enemies[2].push( new Enemy3( context3 ) );
+		enemies[3].push( new Enemy4( context4 ) );
 	}
 
 	/**
@@ -87,11 +325,18 @@ window.addEventListener( 'load', function() {
 	function animate() {
 
 		// clear the canvas before drawing the current frame
-		context.clearRect( 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
+		context1.clearRect( 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
+		context2.clearRect( 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
+		context3.clearRect( 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
+		context4.clearRect( 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
 
-		enemies.forEach( ( enemy ) => {
-			enemy.update();
-			enemy.draw();
+		enemies.forEach( (enemyGroup) => {
+
+			enemyGroup.forEach( (enemy) => {
+
+				enemy.update();
+				enemy.draw();
+			});
 		});
 
 		gameFrame++;
