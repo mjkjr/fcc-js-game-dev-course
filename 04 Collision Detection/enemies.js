@@ -9,7 +9,7 @@ class Enemy1 {
 
 		// sprite sheet image
 		this.image = new Image();
-		this.image.src = 'art/enemy1.png';
+		this.image.src = '../assets/art/characters/enemy1.png';
 
 		// sprite frame size
 		this.spriteWidth = 293;
@@ -80,7 +80,7 @@ class Enemy2 {
 
 		// sprite sheet image
 		this.image = new Image();
-		this.image.src = 'art/enemy2.png';
+		this.image.src = '../assets/art/characters/enemy2.png';
 
 		// sprite frame size
 		this.spriteWidth = 266;
@@ -159,7 +159,7 @@ class Enemy3 {
 
 		// sprite sheet image
 		this.image = new Image();
-		this.image.src = 'art/enemy3.png';
+		this.image.src = '../assets/art/characters/enemy3.png';
 
 		// sprite frame size
 		this.spriteWidth = 218;
@@ -236,7 +236,7 @@ class Enemy4 {
 
 		// sprite sheet image
 		this.image = new Image();
-		this.image.src = 'art/enemy4.png';
+		this.image.src = '../assets/art/characters/enemy4.png';
 
 		// sprite frame size
 		this.spriteWidth = 213;

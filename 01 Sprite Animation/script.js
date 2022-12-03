@@ -18,7 +18,7 @@ dropdown.addEventListener( 'change', (event) => {
 });
 
 const playerImage = new Image();
-playerImage.src = 'art/shadow_dog.png';
+playerImage.src = '../assets/art/characters/shadow_dog.png';
 const spriteWidth = 575;//6876 / 12;							// spriteSheet width / # columns
 const spriteHeight = 5230 / 10;							// spriteSheet height / # rows
 

@@ -17,15 +17,15 @@ const CANVAS_HEIGHT = canvas.height = 700;
 let gameSpeed = 6;
 
 const bgLayer1 = new Image();
-bgLayer1.src = 'art/layer-1.png';
+bgLayer1.src = '../assets/art/background/layer-1.png';
 const bgLayer2 = new Image();
-bgLayer2.src = 'art/layer-2.png';
+bgLayer2.src = '../assets/art/background/layer-2.png';
 const bgLayer3 = new Image();
-bgLayer3.src = 'art/layer-3.png';
+bgLayer3.src = '../assets/art/background/layer-3.png';
 const bgLayer4 = new Image();
-bgLayer4.src = 'art/layer-4.png';
+bgLayer4.src = '../assets/art/background/layer-4.png';
 const bgLayer5 = new Image();
-bgLayer5.src = 'art/layer-5.png';
+bgLayer5.src = '../assets/art/background/layer-5.png';
 
 const slider = document.getElementById( 'slider' );
 slider.value = gameSpeed;
