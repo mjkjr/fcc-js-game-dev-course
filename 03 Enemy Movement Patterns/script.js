@@ -31,7 +31,7 @@ const context4 = canvas4.getContext( '2d' );
 
 	this.window.addEventListener( 'resize', (event) => {
 
-		// note: this doesn't handle re-calculating game objects relative positions
+		console.warn("Resize event handler doesn't re-calculate game object relative positions");
 
 		// use the new grid size for height since the canvas doesn't scale properly
 		gridStyle = this.window.getComputedStyle( document.getElementById('grid') );
