@@ -28,7 +28,7 @@ File(s): 'shadow_dog.png'
 Source: https://bevouliin.com/shadow-dog-sprites-with-stickman-style/
 
 Directory: 'art/characters/'
-File(s): 'enemy1.png', 'enemy2.png', 'enemy3.png', 'enemy4.png'
+File(s): 'enemy1.png', 'enemy2.png', 'enemy3.png', 'enemy4.png', 'raven.png'
 Source: https://bevouliin.com/18-gothic-creatures-sprite-sheets/
 
 Directory: 'art/effects/'
