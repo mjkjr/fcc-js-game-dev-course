@@ -43,11 +43,9 @@
 	let lastTime = 0;
 	let timeToNextRaven = 0;
 	let ravenInterval = 500;
-
 	let ravens = [ new Raven( context, CANVAS_WIDTH, CANVAS_HEIGHT ) ];
 	const explosions = [];
 
-	let gameFrame = 0;
 
 	/**
 	 * Handle mouse clicks
@@ -57,6 +55,61 @@
 		//console.log('click!');
 		explosions.push( new Explosion( context, CANVAS_POSITION.x + event.x, CANVAS_POSITION.y + event.y ) );
 	});
+
+
+	/**
+	 * Per-frame game logic
+	 * @param {number} deltaTime time elapsed since previous frame
+	 */
+	function update( deltaTime ) {
+
+		// update raven spawn timer
+		timeToNextRaven += deltaTime;
+
+		// spawn new raven at set interval
+		if ( timeToNextRaven >= ravenInterval ) {
+			ravens.push( new Raven( context, CANVAS_WIDTH, CANVAS_HEIGHT ) );
+			timeToNextRaven = 0;
+		}
+
+		// update ravens
+		ravens.forEach( (raven) => {
+			raven.update( deltaTime, CANVAS_WIDTH, CANVAS_HEIGHT );
+		});
+
+		ravens = ravens.filter( (raven) => { return !raven.dead } );
+
+		// update explosion state
+		for ( let i = 0; i < explosions.length; ++i ) {
+
+			explosions[i].update( deltaTime );
+
+			if ( explosions[i].frame > explosions[i].frames ) {
+
+				// remove the completed explosion from the array
+				explosions.splice( i, 1 );
+
+				// adjust loop control index
+				i--;
+
+			}
+		}
+	}
+
+	/**
+	 * Draws the frame
+	 */
+	function render() {
+
+		// clear the canvas before drawing the current frame
+		context.clearRect( 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
+
+		// draw ravens
+		ravens.forEach( (raven) => { raven.draw(); });
+
+		// draw explosions
+		explosions.forEach( (explosion) => { explosion.draw(); });
+	}
 
 	/**
 	 * Runs the logic and draws the game scene
@@ -69,47 +122,14 @@
 		let deltaTime = timestamp - lastTime;
 		lastTime = timestamp;
 
-		// update raven spawn timer
-		timeToNextRaven += deltaTime;
-		if ( timeToNextRaven >= ravenInterval ) {
+		update( deltaTime );
+		render();
 
-			ravens.push( new Raven( context, CANVAS_WIDTH, CANVAS_HEIGHT ) );
-			timeToNextRaven = 0;
-		}
-
-		// clear the canvas before drawing the current frame
-		context.clearRect( 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
-
-		// draw enemies
-		ravens.forEach( (raven) => {
-
-			raven.update( gameFrame, CANVAS_WIDTH, CANVAS_HEIGHT );
-			raven.draw();
-		});
-
-		// draw explosions
-		for ( let i = 0; i < explosions.length; ++i ) {
-
-			if ( explosions[i].frame >= 5 ) {
-
-				// remove the completed explosion from the array
-				explosions.splice( i, 1 );
-
-				// adjust loop control index
-				i--;
-
-			} else {
-
-				explosions[i].update();
-				explosions[i].draw();
-			}
-		}
-
-		gameFrame++;
-
-		// continue animating
+		// continue looping
 		requestAnimationFrame( loop );
 	}
+
+	// initial call to loop function, providing 0 for initial timestamp
 	loop(0);
 
 });

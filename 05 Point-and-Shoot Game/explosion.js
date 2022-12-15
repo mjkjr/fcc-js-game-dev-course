@@ -35,20 +35,30 @@ class Explosion {
 		this.frame = 0;
 
 		// animation speed modifier
-		this.timer = 0;
+		this.animationSpeed = 4;
+
+		// frame-independent animation
+		// rate at which animation frames will progress, in milliseconds
+		this.animationInterval = 100;
+		// time elapsed since the previous interval was triggered
+		this.animationTimer = 0;
+
 	}
 
 	/**
 	 * Updates the object state
 	 */
-	update() {
+	update( deltaTime ) {
 
 		if ( this.frame === 0 ) { this.sound.play(); }
 
-		this.timer++;
+		// update animation frame state
+		this.animationTimer += deltaTime;
 
-		if ( this.timer % 4 === 0 ) {
+		if ( this.animationTimer >= this.animationInterval ) {
+
 			this.frame++;
+			this.animationTimer = 0;
 		}
 	}
 

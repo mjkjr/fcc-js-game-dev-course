@@ -363,6 +363,9 @@ class Raven extends Enemy {
 		this.width = this.spriteWidth / this.scale;
 		this.height = this.spriteHeight / this.scale;
 
+		// set the radius
+		this.radius = this.width > this.height ? this.width/2 : this.height/2;
+
 		// set initial horizontal position
 		this.x = canvas_width;
 
@@ -370,29 +373,41 @@ class Raven extends Enemy {
 		this.y = Math.random() * ( canvas_height - this.height );
 
 		// movement speed
-		this.speedX = Math.random() * 5 + 3;
-		this.speedY = Math.random() * 5 - 2.5;
+		this.speedX =  8 + Math.random() * 32;
+		this.speedY = -4 + Math.random() * 16;
 
-		// randomize animation speed
-		this.animationSpeed = Math.floor(2 + Math.random() * 4);
+		// frame-independent animation
+		// rate at which animation frames will progress, in milliseconds
+		this.animationInterval = 100 - this.speedX;
+		// time elapsed since the previous interval was triggered
+		this.animationTimer = 0;
 
-		// set the radius
-		this.radius = this.width > this.height ? this.width/2 : this.height/2;
+		// lifetime flag
+		this.dead = false;
 	}
 
 	/**
 	 * Updates the enemy state
 	 */
-	update( gameFrame, canvas_width, canvas_height ) {
+	update( deltaTime, canvas_width, canvas_height ) {
 
-		this.x -= this.speedX;
-		this.y -= this.speedY;
-
+		// clear collision flag
 		this.isCollided = false;
 
-		if ( gameFrame % this.animationSpeed == 0 ) {
+		// calculate movement
+		this.x -= this.speedX * deltaTime*0.01;
+		this.y -= this.speedY * deltaTime*0.01;
+
+		// detect if off-screen
+		if ( this.x < 0 - this.width ) { this.dead = true; }
+
+		// update animation frame state
+		this.animationTimer += deltaTime;
+
+		if ( this.animationTimer >= this.animationInterval ) {
 
 			this.frame >= this.maxFrame ? this.frame = 0 : this.frame++;
+			this.animationTimer = 0;
 		}
 	}
 
